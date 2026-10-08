@@ -69,9 +69,11 @@ async function completeBookmarkIngest(params: {
   userId: string
   result: ConversionResult
   fallbackTitle: string
+  userTitle?: string
 }) {
-  const { bookmarkId, userId, result, fallbackTitle } = params
-  const finalTitle = result.title || fallbackTitle
+  const { bookmarkId, userId, result, fallbackTitle, userTitle } = params
+  // 用户手动填写的标题优先于自动抽取的标题
+  const finalTitle = userTitle || result.title || fallbackTitle
   const description = extractDescription(result.markdown)
 
   await db
@@ -167,6 +169,7 @@ async function processIngestUrl(
       userId,
       result,
       fallbackTitle: userTitle || url,
+      userTitle,
     })
   } catch (error) {
     const errMsg = error instanceof Error ? error.message : "Unknown error"
@@ -235,6 +238,7 @@ async function processIngestFile(
       userId,
       result,
       fallbackTitle: userTitle || fileName || "Untitled",
+      userTitle,
     })
   } catch (error) {
     const errMsg = error instanceof Error ? error.message : "Unknown error"
@@ -303,6 +307,7 @@ async function processIngestExtension(
       userId,
       result,
       fallbackTitle: userTitle || url,
+      userTitle,
     })
   } catch (error) {
     const errMsg = error instanceof Error ? error.message : "Unknown error"
