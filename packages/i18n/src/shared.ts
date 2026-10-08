@@ -1,4 +1,4 @@
-export type Locale = "zh" | "en"
+export type Locale = "zh" | "en" | "pt"
 
 export type DeepTranslationRecord<T> = T extends string
   ? string

@@ -23,7 +23,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
-import { useLocale, useT } from "@/lib/i18n"
+import { DATE_LOCALE, useLocale, useT } from "@/lib/i18n"
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false })
 const MDPreview = dynamic(() => import("@uiw/react-md-editor").then((m) => m.default.Markdown), {
@@ -163,9 +163,7 @@ function Header({
   )
 }
 
-function getSourceLabel(
-  sourceType: string | null
-): {
+function getSourceLabel(sourceType: string | null): {
   label: "sourceWeb" | "sourceExtension" | "sourceFile"
   icon: typeof Monitor | typeof Puzzle | typeof FileText
 } {
@@ -286,7 +284,7 @@ function MetadataSection({ bookmark }: { bookmark: BookmarkDetail }) {
           {t.bookmarkDetail.savedAt}
         </span>
         <span>
-          {new Date(bookmark.createdAt).toLocaleDateString(locale === "zh" ? "zh-CN" : "en", {
+          {new Date(bookmark.createdAt).toLocaleDateString(DATE_LOCALE[locale], {
             year: "numeric",
             month: "long",
             day: "numeric",
@@ -301,7 +299,7 @@ function MetadataSection({ bookmark }: { bookmark: BookmarkDetail }) {
               {t.bookmarkDetail.publishedAt}
             </span>
             <span>
-              {new Date(bookmark.sourceCreatedAt).toLocaleDateString(locale === "zh" ? "zh-CN" : "en", {
+              {new Date(bookmark.sourceCreatedAt).toLocaleDateString(DATE_LOCALE[locale], {
                 year: "numeric",
                 month: "long",
                 day: "numeric",

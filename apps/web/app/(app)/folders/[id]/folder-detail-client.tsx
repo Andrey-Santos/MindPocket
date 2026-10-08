@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
+import { useT } from "@/lib/i18n"
 
 interface FolderInfo {
   id: string
@@ -19,6 +20,8 @@ interface FolderInfo {
 }
 
 export function FolderDetailClient({ folder }: { folder: FolderInfo }) {
+  const t = useT()
+
   return (
     <SidebarInset className="flex min-w-0 flex-col overflow-hidden">
       <header className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-2 bg-background">
@@ -28,7 +31,7 @@ export function FolderDetailClient({ folder }: { folder: FolderInfo }) {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">收藏</BreadcrumbLink>
+                <BreadcrumbLink href="/">{t.sidebar.bookmarks}</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>

@@ -1,10 +1,6 @@
 "use client"
 
-import {
-  getSiteDictionary,
-  type Locale,
-  type SiteTranslationDict,
-} from "@repo/i18n"
+import { getSiteDictionary, type Locale, type SiteTranslationDict } from "@repo/i18n"
 import React from "react"
 
 export type SiteLocale = Locale
@@ -17,6 +13,8 @@ interface SiteI18nContextValue {
   t: SiteTranslationDict
 }
 
+const HTML_LANG: Record<SiteLocale, string> = { zh: "zh-CN", en: "en", pt: "pt-BR" }
+
 const SiteI18nContext = React.createContext<SiteI18nContextValue | null>(null)
 
 export function SiteI18nProvider({ children }: { children: React.ReactNode }) {
@@ -24,17 +22,23 @@ export function SiteI18nProvider({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     const saved = window.localStorage.getItem(STORAGE_KEY)
-    if (saved === "zh" || saved === "en") {
+    if (saved === "zh" || saved === "en" || saved === "pt") {
       setLocaleState(saved)
       return
     }
-    const inferred = navigator.language.toLowerCase().startsWith("zh") ? "zh" : "en"
-    setLocaleState(inferred)
+    const lang = navigator.language.toLowerCase()
+    if (lang.startsWith("zh")) {
+      setLocaleState("zh")
+    } else if (lang.startsWith("pt")) {
+      setLocaleState("pt")
+    } else {
+      setLocaleState("en")
+    }
   }, [])
 
   React.useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, locale)
-    document.documentElement.lang = locale === "zh" ? "zh-CN" : "en"
+    document.documentElement.lang = HTML_LANG[locale]
   }, [locale])
 
   const value = React.useMemo(

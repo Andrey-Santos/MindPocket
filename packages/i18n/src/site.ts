@@ -16,6 +16,7 @@ const zh = {
     closeMenu: "关闭菜单",
     languageZh: "中文",
     languageEn: "EN",
+    languagePt: "PT",
   },
   hero: {
     badge: "开源 · 免费 · 一键部署",
@@ -154,6 +155,7 @@ const en: SiteTranslationDict = {
     closeMenu: "Close Menu",
     languageZh: "中文",
     languageEn: "EN",
+    languagePt: "PT",
   },
   hero: {
     badge: "Open Source · Free · One-Click Deploy",
@@ -277,7 +279,151 @@ const en: SiteTranslationDict = {
   },
 }
 
-export const siteDictionaries: Record<Locale, SiteTranslationDict> = { zh, en }
+const pt: SiteTranslationDict = {
+  nav: {
+    features: "Recursos",
+    solutions: "Preços",
+    platform: "Plataforma",
+    roadmap: "Roteiro",
+    changelog: "Novidades",
+    login: "Entrar",
+    signup: "Cadastrar",
+    getStarted: "Começar",
+    mobile: "Celular",
+    web: "Web",
+    openMenu: "Abrir menu",
+    closeMenu: "Fechar menu",
+    languageZh: "中文",
+    languageEn: "EN",
+    languagePt: "PT",
+  },
+  hero: {
+    badge: "Código aberto · Gratuito · Deploy com um clique",
+    title: "Seu sistema pessoal de favoritos com IA",
+    subtitle:
+      "O MindPocket unifica seus favoritos na web, no celular e na extensão do navegador, e gera resumos e tags automaticamente para encontrar tudo mais rápido.",
+    primaryCta: "Fazer deploy agora",
+    secondaryCta: "Ler a documentação",
+    savedLinks: "Links salvos",
+    savingTrend: "Você está salvando mais favoritos por semana este ano do que em 2025.",
+    savesPerWeek: "Salvos/semana",
+    all: "Todos",
+    links: "Links",
+    articles: "Artigos",
+    item1Title: "Padrões de cache de RSC no React",
+    item1Meta: "react.dev · há 2h",
+    item2Title: "Guia de tool calling do AI SDK",
+    item2Meta: "vercel.com · há 1 dia",
+  },
+  features: {
+    title: "Feito para capturar conhecimento pessoal",
+    subtitle: "Da coleta e organização à busca com IA, um único fluxo para seus favoritos.",
+    items: [
+      {
+        title: "Deploy sem custo",
+        description: "Os planos gratuitos da Vercel + Neon são suficientes para uso pessoal.",
+      },
+      {
+        title: "Multiplataforma",
+        description:
+          "Use Web, Celular e Extensão do navegador para salvar e acessar de qualquer lugar.",
+      },
+      {
+        title: "Com IA",
+        description:
+          "Resumos baseados em RAG e tags automáticas ajudam você a encontrar informações na hora.",
+      },
+    ],
+  },
+  integrations: {
+    title: "Conecte suas fontes de conhecimento favoritas",
+    subtitle: "Crie uma entrada única para captura, organização e busca.",
+    cta: "Começar",
+  },
+  content: {
+    title: "Mais que favoritos: sua base de conhecimento pessoal",
+    paragraph1:
+      "O MindPocket organiza seu conteúdo salvo com pastas e tags, para que seu acervo continue fácil de pesquisar com o tempo.",
+    paragraph2:
+      "Com agente de IA e busca vetorial, você pode fazer perguntas sobre seu histórico salvo e receber respostas úteis.",
+    quote:
+      "Quanto mais eu salvo, mais fácil fica encontrar as coisas. Os resumos e tags automáticos me poupam muito tempo de organização.",
+    author: "Feedback de um dos primeiros usuários",
+    authorRole: "Desenvolvedor independente",
+  },
+  stats: {
+    title: "Principais indicadores do produto",
+    subtitle: "Pensado para uso pessoal de longo prazo: gratuito, controlável e extensível.",
+    items: [
+      { value: "100%", label: "Código aberto" },
+      { value: "3 apps", label: "Web / Celular / Extensão" },
+      { value: "1 min", label: "Deploy com um clique" },
+    ],
+  },
+  testimonials: {
+    title: "Feito para fluxos reais de favoritos",
+    subtitle:
+      "De criadores independentes a grandes consumidores de informação, a configuração é rápida e prática.",
+    items: [
+      {
+        text: "Guardo artigos técnicos, ideias de produto e referências em um só lugar. Os resumos da IA deixam a revisão muito mais rápida.",
+        name: "Kai",
+        role: "Desenvolvedor independente",
+      },
+      {
+        text: "Salvar com um clique pela extensão é fluido. Depois busco por tags na web sem salvar em duplicidade.",
+        name: "Lena",
+        role: "Gerente de produto",
+      },
+      {
+        text: "Ler no celular e organizar rapidamente durante o trajeto virou parte da minha rotina.",
+        name: "Ming",
+        role: "Criador de conteúdo",
+      },
+      {
+        text: "Código aberto e propriedade dos dados são o mais importante para mim. Integrar meus próprios modelos é simples.",
+        name: "Rui",
+        role: "Engenheiro full-stack",
+      },
+    ],
+  },
+  cta: {
+    title: "Monte hoje seu sistema de favoritos com IA",
+    subtitle: "Faça um fork do repositório e publique na Vercel em minutos.",
+    primary: "Começar",
+    secondary: "Guia de deploy",
+  },
+  changelog: {
+    title: "Novidades",
+    subtitle: "Acompanhe as últimas atualizações e melhorias do MindPocket.",
+  },
+  footer: {
+    links: ["Recursos", "Soluções", "Clientes", "Preços", "Ajuda", "Sobre"],
+    copyright: "MindPocket. Todos os direitos reservados.",
+  },
+  pricing: {
+    title: "100% gratuito e de código aberto",
+    subtitle:
+      "O MindPocket é totalmente de código aberto. Você pode usar, modificar e fazer deploy gratuitamente.",
+    planTitle: "Edição de código aberto",
+    price: "R$ 0 / Grátis para sempre",
+    description: "Funcionalidades completas, sem limites de uso",
+    features: [
+      "Suporte completo para Web, Celular e Extensão",
+      "Resumos e geração de tags com IA",
+      "Sincronização entre plataformas",
+      "Hospedagem própria com controle total dos dados",
+      "Deploy nos planos gratuitos da Vercel + Neon",
+      "Código aberto que você pode modificar livremente",
+      "Suporte da comunidade",
+      "Atualizações e manutenção contínuas",
+    ],
+    github: "Ver projeto no GitHub",
+    deploy: "Deploy com um clique",
+  },
+}
+
+export const siteDictionaries: Record<Locale, SiteTranslationDict> = { zh, en, pt }
 
 export function getSiteDictionary(locale: Locale): SiteTranslationDict {
   return siteDictionaries[locale]

@@ -8,7 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import { useLocale, useT } from "@/lib/i18n"
+import { DATE_LOCALE, useLocale, useT } from "@/lib/i18n"
 
 interface GrowthChartProps {
   data: Array<{ date: string; count: number }>
@@ -75,7 +75,7 @@ export function GrowthChart({ data, days, onDaysChange }: GrowthChartProps) {
               content={
                 <ChartTooltipContent
                   labelFormatter={(value: string) => {
-                    return new Date(value).toLocaleDateString(locale === "zh" ? "zh-CN" : "en")
+                    return new Date(value).toLocaleDateString(DATE_LOCALE[locale])
                   }}
                 />
               }

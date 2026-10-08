@@ -96,6 +96,11 @@ export const SiteHeader = () => {
                     label={t.nav.languageEn}
                     onClick={() => setLocale("en")}
                   />
+                  <LangButton
+                    active={locale === "pt"}
+                    label={t.nav.languagePt}
+                    onClick={() => setLocale("pt")}
+                  />
                 </div>
                 <Button
                   asChild

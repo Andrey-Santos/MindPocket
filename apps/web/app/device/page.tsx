@@ -24,7 +24,7 @@ export default async function DevicePage({
     <div className="flex min-h-svh items-center justify-center bg-muted p-6 md:p-10">
       <DeviceApprovalCard
         initialUserCode={userCode}
-        userName={session.user.name || session.user.email || "当前账户"}
+        userName={session.user.name || session.user.email || ""}
       />
     </div>
   )

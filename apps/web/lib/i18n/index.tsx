@@ -1,10 +1,6 @@
 "use client"
 
-import {
-  getWebDictionary,
-  type Locale,
-  type WebTranslationDict,
-} from "@repo/i18n"
+import { getWebDictionary, type Locale, type WebTranslationDict } from "@repo/i18n"
 import { createContext, useCallback, useContext, useEffect, useState } from "react"
 
 export type { Locale } from "@repo/i18n"
@@ -18,6 +14,9 @@ interface LocaleContextValue {
 const STORAGE_KEY = "mindpocket-locale"
 const DEFAULT_LOCALE: Locale = "zh"
 
+// BCP 47 tags used for <html lang> and date formatting
+export const DATE_LOCALE: Record<Locale, string> = { zh: "zh-CN", en: "en", pt: "pt-BR" }
+
 const LocaleContext = createContext<LocaleContextValue | null>(null)
 
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
@@ -25,7 +24,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY) as Locale | null
-    if (stored && (stored === "zh" || stored === "en")) {
+    if (stored && (stored === "zh" || stored === "en" || stored === "pt")) {
       setLocaleState(stored)
     }
   }, [])
@@ -33,7 +32,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const setLocale = useCallback((l: Locale) => {
     setLocaleState(l)
     localStorage.setItem(STORAGE_KEY, l)
-    document.documentElement.lang = l === "zh" ? "zh-CN" : "en"
+    document.documentElement.lang = DATE_LOCALE[l]
   }, [])
 
   const t = getWebDictionary(locale)

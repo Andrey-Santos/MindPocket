@@ -12,6 +12,9 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { useT } from "@/lib/i18n"
+
+type DeviceText = ReturnType<typeof useT>["device"]
 
 type VerifyStatus = "idle" | "loading" | "pending" | "approved" | "denied" | "error"
 
@@ -38,26 +41,31 @@ function formatUserCode(value: string) {
   return `${clean.slice(0, 4)}-${clean.slice(4)}`
 }
 
-async function parseError(response: Response) {
+async function parseError(response: Response, d: DeviceText) {
   const text = await response.text()
   if (!text) {
-    return `请求失败（${response.status}）`
+    return d.requestFailed.replace("{status}", String(response.status))
   }
 
   try {
     const data = JSON.parse(text) as ApiErrorShape
-    return data.error_description || data.message || data.error || `请求失败（${response.status}）`
+    return (
+      data.error_description ||
+      data.message ||
+      data.error ||
+      d.requestFailed.replace("{status}", String(response.status))
+    )
   } catch {
     return text
   }
 }
 
-async function fetchVerificationStatus(value: string) {
+async function fetchVerificationStatus(value: string, d: DeviceText) {
   const formatted = formatUserCode(value)
   if (!normalizeUserCode(formatted)) {
     return {
       status: "error" as const,
-      message: "请输入 CLI 显示的用户验证码。",
+      message: d.enterCode,
     }
   }
 
@@ -68,7 +76,7 @@ async function fetchVerificationStatus(value: string) {
   if (!response.ok) {
     return {
       status: "error" as const,
-      message: await parseError(response),
+      message: await parseError(response, d),
     }
   }
 
@@ -78,39 +86,40 @@ async function fetchVerificationStatus(value: string) {
   if (nextStatus === "pending") {
     return {
       status: nextStatus,
-      message: "验证码有效。确认后，这个 CLI 将以你的账户身份访问 MindPocket。",
+      message: d.pending,
     }
   }
 
   if (nextStatus === "approved") {
     return {
       status: nextStatus,
-      message: "这个设备授权已经完成，无需重复操作。",
+      message: d.alreadyApproved,
     }
   }
 
   if (nextStatus === "denied") {
     return {
       status: nextStatus,
-      message: "这个设备授权已被拒绝。",
+      message: d.alreadyDenied,
     }
   }
 
   return {
     status: "error" as const,
-    message: "无法识别当前授权状态。",
+    message: d.unknownStatus,
   }
 }
 
-function getDecisionMessage(decision: "approve" | "deny") {
+function getDecisionMessage(decision: "approve" | "deny", d: DeviceText) {
   if (decision === "approve") {
-    return "授权成功。你可以回到终端，CLI 会继续完成登录。"
+    return d.approvedMessage
   }
 
-  return "你已拒绝这次设备授权。CLI 轮询会收到拒绝结果。"
+  return d.deniedMessage
 }
 
 export function DeviceApprovalCard({ initialUserCode, userName }: DeviceApprovalCardProps) {
+  const d = useT().device
   const [userCodeInput, setUserCodeInput] = useState(formatUserCode(initialUserCode))
   const [status, setStatus] = useState<VerifyStatus>(initialUserCode ? "loading" : "idle")
   const [message, setMessage] = useState("")
@@ -127,19 +136,19 @@ export function DeviceApprovalCard({ initialUserCode, userName }: DeviceApproval
       setStatus("loading")
       setMessage("")
 
-      const result = await fetchVerificationStatus(initialUserCode)
+      const result = await fetchVerificationStatus(initialUserCode, d)
       setStatus(result.status)
       setMessage(result.message)
     }
 
     runVerification()
-  }, [initialUserCode])
+  }, [initialUserCode, d])
 
   const verifyCode = async (value: string) => {
     setStatus("loading")
     setMessage("")
 
-    const result = await fetchVerificationStatus(value)
+    const result = await fetchVerificationStatus(value, d)
     setStatus(result.status)
     setMessage(result.message)
   }
@@ -162,36 +171,38 @@ export function DeviceApprovalCard({ initialUserCode, userName }: DeviceApproval
 
     if (!response.ok) {
       setStatus("error")
-      setMessage(await parseError(response))
+      setMessage(await parseError(response, d))
       return
     }
 
     setStatus(decision === "approve" ? "approved" : "denied")
-    setMessage(getDecisionMessage(decision))
+    setMessage(getDecisionMessage(decision, d))
   }
 
   const statusContent =
     status === "loading" ? (
       <span className="inline-flex items-center gap-2">
         <Loader2 className="h-4 w-4 animate-spin" />
-        正在校验设备授权状态...
+        {d.verifying}
       </span>
     ) : (
-      <span>{message || "打开 CLI 提供的链接后，这里会显示授权状态。"}</span>
+      <span>{message || d.idleHint}</span>
     )
 
   return (
     <Card className="mx-auto w-full max-w-xl">
       <CardHeader>
-        <CardTitle>授权 MindPocket CLI</CardTitle>
+        <CardTitle>{d.title}</CardTitle>
         <CardDescription>
-          当前登录账户：{userName}。输入或确认 CLI 展示的用户验证码，然后决定是否授权。
+          {d.descriptionPrefix}
+          {userName || d.currentAccount}
+          {d.descriptionSuffix}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
           <label className="font-medium text-sm" htmlFor="user-code">
-            用户验证码
+            {d.userCode}
           </label>
           <div className="flex gap-2">
             <Input
@@ -199,11 +210,11 @@ export function DeviceApprovalCard({ initialUserCode, userName }: DeviceApproval
               autoCorrect="off"
               id="user-code"
               onChange={(event) => setUserCodeInput(formatUserCode(event.target.value))}
-              placeholder="例如 ABCD-EFGH"
+              placeholder={d.userCodePlaceholder}
               value={userCodeInput}
             />
             <Button onClick={() => verifyCode(userCodeInput)} type="button" variant="outline">
-              校验
+              {d.verify}
             </Button>
           </div>
         </div>
@@ -217,7 +228,7 @@ export function DeviceApprovalCard({ initialUserCode, userName }: DeviceApproval
           onClick={() => handleDecision("approve")}
           type="button"
         >
-          {submitting === "approve" ? <Loader2 className="h-4 w-4 animate-spin" /> : "允许访问"}
+          {submitting === "approve" ? <Loader2 className="h-4 w-4 animate-spin" /> : d.approve}
         </Button>
         <Button
           className="flex-1"
@@ -226,7 +237,7 @@ export function DeviceApprovalCard({ initialUserCode, userName }: DeviceApproval
           type="button"
           variant="outline"
         >
-          {submitting === "deny" ? <Loader2 className="h-4 w-4 animate-spin" /> : "拒绝授权"}
+          {submitting === "deny" ? <Loader2 className="h-4 w-4 animate-spin" /> : d.deny}
         </Button>
       </CardFooter>
     </Card>

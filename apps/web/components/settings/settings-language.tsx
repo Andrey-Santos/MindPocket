@@ -24,6 +24,7 @@ export function SettingsLanguage() {
         <SelectContent>
           <SelectItem value="zh">{t.settings.languageZh}</SelectItem>
           <SelectItem value="en">{t.settings.languageEn}</SelectItem>
+          <SelectItem value="pt">{t.settings.languagePt}</SelectItem>
         </SelectContent>
       </Select>
     </div>
