@@ -12,7 +12,7 @@ interface LocaleContextValue {
 }
 
 const STORAGE_KEY = "mindpocket-locale"
-const DEFAULT_LOCALE: Locale = "zh"
+const DEFAULT_LOCALE: Locale = "pt"
 
 // BCP 47 tags used for <html lang> and date formatting
 export const DATE_LOCALE: Record<Locale, string> = { zh: "zh-CN", en: "en", pt: "pt-BR" }

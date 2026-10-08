@@ -18,21 +18,13 @@ const HTML_LANG: Record<SiteLocale, string> = { zh: "zh-CN", en: "en", pt: "pt-B
 const SiteI18nContext = React.createContext<SiteI18nContextValue | null>(null)
 
 export function SiteI18nProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = React.useState<SiteLocale>("zh")
+  const [locale, setLocaleState] = React.useState<SiteLocale>("pt")
 
   React.useEffect(() => {
     const saved = window.localStorage.getItem(STORAGE_KEY)
     if (saved === "zh" || saved === "en" || saved === "pt") {
       setLocaleState(saved)
       return
-    }
-    const lang = navigator.language.toLowerCase()
-    if (lang.startsWith("zh")) {
-      setLocaleState("zh")
-    } else if (lang.startsWith("pt")) {
-      setLocaleState("pt")
-    } else {
-      setLocaleState("en")
     }
   }, [])
 
