@@ -1,5 +1,7 @@
 "use client"
 
+import { Import } from "lucide-react"
+import Link from "next/link"
 import { useCallback, useEffect, useState } from "react"
 import { FolderRanking } from "@/components/dashboard/folder-ranking"
 import { GrowthChart } from "@/components/dashboard/growth-chart"
@@ -11,6 +13,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb"
+import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { useT } from "@/lib/i18n"
@@ -68,6 +71,13 @@ export default function DashboardPage() {
             </BreadcrumbList>
           </Breadcrumb>
         </div>
+        {/* 导入快捷入口 */}
+        <Button asChild className="mr-3" size="sm" variant="outline">
+          <Link href="/ingest">
+            <Import className="size-4" />
+            {t.sidebar.import}
+          </Link>
+        </Button>
       </header>
       <div className="flex min-w-0 flex-1 flex-col gap-4 overflow-y-auto p-4">
         <DashboardContent
